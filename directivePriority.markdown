@@ -19,7 +19,7 @@ to work its magic.
 
 ```
 # index.html:
-&lt;input instant-edit="MyObj.myField" decimal-places=2 />
+<input instant-edit="MyObj.myField" decimal-places=2 />
 ```
 
 ```
