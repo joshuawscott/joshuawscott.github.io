@@ -1,2 +1,2 @@
-*.swp
-.idea
+_site
+.sass-cache

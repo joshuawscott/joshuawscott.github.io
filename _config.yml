@@ -1,0 +1,13 @@
+# Site settings
+title: Performance Artistry
+email: joshua.scott@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  Performance, Databases, Programming, Beer.  The safe house for premature
+  optimization and drunken coding.
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://joshuawscott.github.io" # the base hostname & protocol for your site
+twitter_username: joshuawscott
+github_username:  joshuawscott
+
+# Build settings
+markdown: kramdown
