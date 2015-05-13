@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AngularJS Directive Priority"
-date:   2015-05-03 12:52:00
+date:   2015-05-12 21:59:00
 categories: redis
 ---
 ## directive priority

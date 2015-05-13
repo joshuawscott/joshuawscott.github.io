@@ -1,0 +1,130 @@
+---
+layout: post
+title:  "Redis by Example"
+date:   2015-05-03 12:52:00
+categories: redis
+---
+
+Some examples here are using the standard ruby client 
+[redis-rb](https://github.com/redis/redis-rb), while others are done in the
+normal redis client that ships with the server. To use the ruby redis client,
+put the following into the Gemfile of your project:
+
+{% highlight ruby %}
+gem 'redis'
+gem 'hiredis'
+{% endhighlight %}
+
+or, outside a project, `gem install redis hiredis`
+
+## Install/Setup
+
+I'm doing this on my Mac, so I used brew to install:
+
+{% highlight bash %}
+brew install redis
+{% endhighlight %}
+
+You can also download from [redis.io/download](http://redis.io/download).
+The latest version (3.0.0 at this time) is highly recommended.
+
+### Important config variables
+
+I recommend that you copy the standard configuration file, usually installed
+in /etc/redis.conf or /usr/local/bin/redis.conf to a new location, then modify 
+as needed. This makes running multiple instances easier.
+
+redis.conf format is:
+
+{% highlight bash %}
+setting value
+{% endhighlight %}
+Comments begin with a `#`. The default config file is well-documented, and I
+recommend that you look there to understand the options. Here are some that you
+may need to edit to get up and running:
+
+* port - the network port the server will listen on. Defaults to 6379.
+* bind - the network interface to bind to. Important if you want to allow
+    or restrict access to the redis server from remote systems
+* dir - the working directory
+* dbfilename - the name of the file that redis will flush the data to 
+    periodically
+* maxmemory - this is not set by default. If it is, then it will cause errors
+    on write if the used memory exceeds the maximum configured.
+
+You should take the defaults for the rest of the settings initially.
+
+### Starting the server
+
+Once you have it installed, you can start the server with 
+`redis-server -c /path/to/redis.conf` where `/path/to/redis.conf` is the 
+location of the configuration file. Assuming you don't have daemonize turned
+on, you will see a splash screen, and some information on the port it is
+listening on.
+
+Assuming you have the default settings, you can run `redis-cli` to connect.
+If you changed the port, you can run `redis-cli -p <portnum>`
+
+## Basics
+
+Redis is an in-memory key/value store, similar to memcached, except that it
+provides a number of data types besides strings to store and manipulate 
+collections of data.
+
+Redis is also very fast:
+
+{% highlight bash %}
+$ redis-benchmark
+...
+====== MSET (10 keys) ======
+  100000 requests completed in 1.52 seconds
+  50 parallel clients
+  3 bytes payload
+  keep alive: 1
+
+98.98% <= 1 milliseconds
+100.00% <= 1 milliseconds
+65703.02 requests per second
+{% endhighlight %}
+
+This is setting 10 keys at a time, so there are over 650,000 key changes per
+second.
+
+All operations in Redis are atomic; no other clients can execute a command
+until the operation finishes.
+
+### Strings
+
+Getting and setting an entry (key):
+
+~~~
+127.0.0.1:6379> set mykey 'this is the value'
+OK
+127.0.0.1:6379> get mykey
+"this is the value"
+127.0.0.1:6379> del mykey
+(integer) 1
+127.0.0.1:6379> get mykey
+(nil)
+~~~
+
+Note that SET returns OK when successful, DEL returns the number of keys 
+deleted. GET returns the value or (nil) if the key doesn't exist.
+
+Counters are built-in:
+
+~~~
+127.0.0.1:6379> incr mycounter
+(integer) 1
+127.0.0.1:6379> incr mycounter
+(integer) 2
+127.0.0.1:6379> get mycounter
+"2"
+127.0.0.1:6379> set mycounter 5
+OK
+127.0.0.1:6379> incr mycounter
+(integer) 6
+~~~
+
+### Lists
+
