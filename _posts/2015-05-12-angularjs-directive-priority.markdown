@@ -2,7 +2,7 @@
 layout: post
 title: "AngularJS Directive Priority"
 date:   2015-05-12 21:59:00
-categories: redis
+categories: angularjs
 ---
 ## directive priority
 
@@ -29,13 +29,16 @@ decimal-places directive.
 
 *Solution*
 
-```
-# index.html:
-<input instant-edit="MyObj.myField" decimal-places=2 />
-```
+*index.html*
+{% highlight html %}
 
-```
-# instantEdit.js
+<input instant-edit="MyObj.myField" decimal-places=2 />
+
+{% endhighlight %}
+
+*instantEdit.js*
+
+{% highlight javascript %}
 
 var app = angular.module('MyApp');
 app.directive('instantEdit', ['$compile', function($compile) {
@@ -61,7 +64,8 @@ app.directive('instantEdit', ['$compile', function($compile) {
         }
     }
 }]);
-```
+
+{% endhighlight %}
 
 In this example, we create a directive that sets up an input box the way we
 want them to work: saving on blur, or when the user doesn't type for 1000
